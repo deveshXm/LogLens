@@ -9,13 +9,27 @@ services:
     networks:
       - kafka-net
 
-  kafka:
+  kafka-1:
     image: 'wurstmeister/kafka:latest'
-    container_name: kafka
+    container_name: kafka-1
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka-net
+  
+  kafka-2:
+    image: 'wurstmeister/kafka:latest'
+    container_name: kafka-2
+    environment:
+      - KAFKA_BROKER_ID=2
+      - KAFKA_LISTENERS=PLAINTEXT://:9092
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
@@ -30,9 +44,10 @@ services:
       dockerfile: Dockerfile
     environment:
       - PORT=3000
-      - KAFKA_ADDR=kafka:9092
+      - KAFKA_ADDR=kafka-1:9092,kafka-2:9092
     depends_on:
-      - kafka
+      - kafka-1
+      - kafka-2
     networks:
       - kafka-net
 
@@ -43,9 +58,10 @@ services:
       dockerfile: Dockerfile
     environment:
       - PORT=3000
-      - KAFKA_ADDR=kafka:9092
+      - KAFKA_ADDR=kafka-1:9092,kafka-2:9092
     depends_on:
-      - kafka
+      - kafka-1
+      - kafka-2
     networks:
       - kafka-net
 
@@ -69,9 +85,10 @@ services:
       context: ./server/log_consumer
       dockerfile: Dockerfile
     environment:
-      - KAFKA_ADDR=kafka:9092
+      - KAFKA_ADDR=kafka-1:9092,kafka-2:9092
     depends_on:
-      - kafka
+      - kafka-1
+      - kafka-2
     networks:
       - kafka-net
 

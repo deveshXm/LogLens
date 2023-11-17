@@ -1,8 +1,10 @@
 var { Kafka } = require("kafkajs");
 
+const defaultKafkaAddr = ['kafka-1:9092,kafka-2:9092']
+
 const kafka = new Kafka({
   clientId: 'log-service',
-  brokers: [process.env.KAFKA_ADDR || 'localhost:9092']
+  brokers: process.env.KAFKA_ADDR ? process.env.KAFKA_ADDR.split(",") : defaultKafkaAddr
 })
 
 const consumer = kafka.consumer({ groupId: "kafka" });
