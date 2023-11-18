@@ -1,31 +1,41 @@
-var express = require('express');
-var router = express.Router();
-var {Kafka} = require('kafkajs');
+const express = require('express');
+const router = express.Router();
+const { Kafka } = require('kafkajs');
 
-const defaultKafkaAddr = ['kafka-1:9092,kafka-2:9092']
+const defaultKafkaAddr = 'kafka-1:9092,kafka-2:9092';
 
 const kafka = new Kafka({
   clientId: 'log-service',
-  brokers: process.env.KAFKA_ADDR ? process.env.KAFKA_ADDR.split(",") : defaultKafkaAddr
-})
+  brokers: process.env.KAFKA_ADDR ? process.env.KAFKA_ADDR.split(",") : defaultKafkaAddr,
+});
 
-const producer = kafka.producer()
+const producer = kafka.producer();
 
-router.post('/', async function(req, res, next) {
-  try{
-    await producer.connect()
+// Connect the producer outside of the request handler
+producer.connect();
+
+router.post('/', async (req, res, next) => {
+  try {
+    // Use a unique key for each message, for example, a timestamp
+    const key = new Date().toISOString();
+
     await producer.send({
       topic: 'logs',
-      messages: [
-        {value: JSON.stringify(req.body)}
-      ]
-    })
-    console.log("message send")
-    res.send({status: 'OK'}).status(200)
-  }catch(err){
-    console.log(err)
-    res.send({status: 'NOT OK'}).status(500)
+      messages: [{ key, value: JSON.stringify(req.body) }],
+    });
+
+    console.log('Message sent');
+    res.status(200).send({ status: 'OK' });
+  } catch (err) {
+    console.error('Error sending message:', err);
+    res.status(500).send({ status: 'NOT OK' });
   }
+});
+
+// Disconnect the producer when the application is shutting down
+process.on('SIGINT', async () => {
+  await producer.disconnect();
+  process.exit(0);
 });
 
 module.exports = router;

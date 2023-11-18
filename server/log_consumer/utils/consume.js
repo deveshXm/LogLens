@@ -1,33 +1,23 @@
-var { Kafka } = require("kafkajs");
-
-const defaultKafkaAddr = ['kafka-1:9092,kafka-2:9092']
+const { Kafka } = require('kafkajs');
 
 const kafka = new Kafka({
-  clientId: 'log-service',
-  brokers: process.env.KAFKA_ADDR ? process.env.KAFKA_ADDR.split(",") : defaultKafkaAddr
-})
+  clientId: 'log-consumer',
+  brokers: ['kafka-1:9092', 'kafka-2:9092'],
+});
 
-const consumer = kafka.consumer({ groupId: "kafka" });
+const consumer = kafka.consumer({ groupId: 'log-group' });
 
-const consume = async () => {
-  try {
-    await consumer.connect();
-    await consumer.subscribe({ topic: "logs", fromBeginning: true });
-    await consumer.run({
-      eachMessage: async ({ message }) => {
-        try {
-          console.log(
-            "****************** Arrived in Consumer ******************"
-          );
-          console.log("our object", JSON.parse(message.value));
-        } catch (err) {
-          console.log(err);
-        }
-      },
-    });
-  } catch (err) {
-    console.log(err);
-  }
+const run = async () => {
+  await consumer.connect();
+  await consumer.subscribe({ topic: 'logs', fromBeginning: true });
+
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      const value = JSON.parse(message.value.toString());
+      // Process the message as needed
+      console.log('Received message:', value);
+    },
+  });
 };
 
-module.exports = consume;
+run().catch(console.error);

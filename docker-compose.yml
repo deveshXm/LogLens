@@ -8,6 +8,7 @@ services:
       - ALLOW_ANONYMOUS_LOGIN=yes
     networks:
       - kafka-net
+    restart: always
 
   kafka-1:
     image: 'wurstmeister/kafka:latest'
@@ -18,11 +19,13 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-1:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CREATE_TOPICS=logs:2:1
     depends_on:
       - zookeeper
     networks:
       - kafka-net
-  
+    restart: always
+
   kafka-2:
     image: 'wurstmeister/kafka:latest'
     container_name: kafka-2
@@ -32,10 +35,12 @@ services:
       - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka-2:9092
       - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CREATE_TOPICS=logs:2:1
     depends_on:
       - zookeeper
     networks:
       - kafka-net
+    restart: always
 
   log-producer-1:
     container_name: log-producer-1
@@ -50,6 +55,7 @@ services:
       - kafka-2
     networks:
       - kafka-net
+    restart: always
 
   log-producer-2:
     container_name: log-producer-2
@@ -64,7 +70,7 @@ services:
       - kafka-2
     networks:
       - kafka-net
-
+    restart: always
 
   log-producer-nginx:
     image: nginx
@@ -78,6 +84,7 @@ services:
       - log-producer-2
     networks:
       - kafka-net
+    restart: always
 
   log-consumer:
     container_name: log-consumer
@@ -91,8 +98,17 @@ services:
       - kafka-2
     networks:
       - kafka-net
+  
+  web-client:
+    container_name: web-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "4173:4173"
+    restart: always
+
 
 networks:
   kafka-net:
     driver: bridge
-
