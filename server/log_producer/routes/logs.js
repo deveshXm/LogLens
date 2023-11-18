@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Kafka } = require('kafkajs');
 
-const defaultKafkaAddr = 'kafka-1:9092,kafka-2:9092';
+const defaultKafkaAddr = ['kafka-1:29092','kafka-2:29093'];
 
 const kafka = new Kafka({
   clientId: 'log-service',
