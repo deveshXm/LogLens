@@ -73,15 +73,11 @@ services:
       memlock:
         soft: -1
         hard: -1
-    ports:
-      - 9200:9200
-      - 9300:9300
     depends_on:
       - kafka-1
       - kafka-2
     stdin_open: true
     tty: true
-    restart: always
     networks:
       - kafka-net
     logging:
@@ -95,6 +91,24 @@ services:
       timeout: 10s
       retries: 5
 
+  # postgres:
+  #   container_name: postgres
+  #   build:
+  #     context: ./server/postgres/
+  #     dockerfile: Dockerfile
+  #   restart: always
+  #   expose:
+  #     - 5432
+  #   environment:
+  #     - POSTGRES_DB=postgres
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=password
+  #     - POSTGRES_PORT=5432
+  #   volumes:
+  #     - postgresvolume:/var/lib/postgresql/data
+  #   networks:
+  #     - kafka-net
+
   logstash:
     container_name: logstash
     image: logstash:7.9.1
@@ -104,13 +118,11 @@ services:
         hard: -1
     volumes:
       - ./server/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
-    ports:
-      - 5044:5044
+      - ./server/logstash/postgres.sh:/usr/share/logstash/scripts/postgres.sh
     depends_on:
       - elasticsearch
     stdin_open: true
     tty: true
-    restart: always
     networks:
       - kafka-net
     logging:
@@ -137,7 +149,6 @@ services:
       - elasticsearch
     stdin_open: true
     tty: true
-    restart: always
     networks:
       - kafka-net
     links: ['elasticsearch']
@@ -152,6 +163,48 @@ services:
       retries: 3
       timeout: 10s
 
+  query-service-1:
+    container_name: query-service-1
+    build:
+      context: ./server/query_service
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+      - ELASTIC_ADDR=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - kafka-net
+    restart: always
+
+  query-service-2:
+    container_name: query-service-2
+    build:
+      context: ./server/query_service
+      dockerfile: Dockerfile
+    environment:
+      - PORT=3000
+      - ELASTIC_ADDR=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    networks:
+      - kafka-net
+    restart: always
+
+  query-service-nginx:
+    image: nginx
+    container_name: query-service-nginx
+    ports:
+      - "3001:80"
+    volumes:
+      - ./nginx/query-service.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - query-service-1
+      - query-service-2
+    networks:
+      - kafka-net
+    restart: always
+  
   log-producer-1:
     container_name: log-producer-1
     build:
@@ -163,9 +216,9 @@ services:
     depends_on:
       - kafka-1
       - kafka-2
+    restart: always
     networks:
       - kafka-net
-    restart: always
 
   log-producer-2:
     container_name: log-producer-2
@@ -175,18 +228,19 @@ services:
     environment:
       - PORT=3000
       - KAFKA_ADDR=kafka-1:29092,kafka-2:29093
+    restart: always
     depends_on:
       - kafka-1
       - kafka-2
     networks:
       - kafka-net
-    restart: always
 
   log-producer-nginx:
     image: nginx
     container_name: log-producer-nginx
     ports:
       - "3000:80"
+    restart: always
     volumes:
       - ./nginx/log-producer.conf:/etc/nginx/nginx.conf
     depends_on:
@@ -194,29 +248,14 @@ services:
       - log-producer-2
     networks:
       - kafka-net
-    restart: always
-
-  # log-consumer:
-  #   container_name: log-consumer
-  #   build:
-  #     context: ./server/log_consumer
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - KAFKA_ADDR=kafka-1:29092,kafka-2:29093
-  #   depends_on:
-  #     - kafka-1
-  #     - kafka-2
-  #   networks:
-  #     - kafka-net
   
-  # web-client:
-  #   container_name: web-client
-  #   build:
-  #     context: ./client
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "4173:4173"
-  #   restart: always
+  web-client:
+    container_name: web-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "4173:4173"
 
 
 networks:
@@ -225,4 +264,6 @@ networks:
 
 volumes:
   elasticsearch_data:
+    driver: local
+  postgresvolume:
     driver: local

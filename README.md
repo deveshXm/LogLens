@@ -32,14 +32,12 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo.png" alt="Logo" width="150" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h1 align="center">Log Lens</h1>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
     <br />
     <br />
@@ -84,18 +82,28 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][system-design]](https://example.com)
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+### System Design
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+Log Lens - Log Ingestor and Query Interface
+Overview
+Welcome to Log Lens, a powerful log management system designed to efficiently handle vast volumes of log data. This project encompasses a robust log ingestor and a user-friendly query interface, providing seamless log analysis capabilities. The following guide will help you understand the project, run it successfully, and explore its features.
 
-Use the `BLANK_README.md` to get started.
+### Features
+1. Efficient Mechanism: Log Lens offers a mechanism to ingest logs efficiently in the provided JSON format.
+2. Scalability: Designed with scalability in mind, Log Lens can handle high volumes of logs without compromising performance.
+3. Bottleneck Mitigation: Potential bottlenecks, including I/O operations and database write speeds, have been mitigated for optimal performance.
+4. Query Interface: Intuitive User Interface: Log Lens provides an intuitive user interface, whether through a web-based UI or a command-line interface (CLI), facilitating full-text search across logs.
+5. Flexible Filters: Users can filter logs based on various criteria, including level, message, resourceId, timestamp, traceId, spanId, commit, and metadata.parentResourceId.
+6. Efficient Searching: Log Lens ensures efficient and quick search results for a seamless user experience.
+Advanced Features (Bonus):
+7. Date Range Search: Implemented search functionality within specific date ranges for enhanced log analysis.
+Regular Expression Support: Log Lens supports the use of regular expressions for more flexible and powerful searches.
+8. Combined Filters: Users can combine multiple filters for a more refined log search.
+9. Real-time Capabilities: Log Lens provides real-time log ingestion and searching capabilities for up-to-the-minute analysis.
+
+![Product Name Screen Shot][system-design]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -105,15 +113,13 @@ Use the `BLANK_README.md` to get started.
 
 This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
-
+* ![React][React.js]
+* <img src="https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"/>   
+* <img src="https://img.shields.io/badge/Nginx-009639?style=for-the-badge&logo=nginx&logoColor=white"/>     
+* <img src="https://img.shields.io/badge/elastic%20cloud-005571?style=for-the-badge&logo=elasticcloud&logoColor=white" />  
+* <img src="https://img.shields.io/badge/Kibana-005571?style=for-the-badge&logo=Kibana&logoColor=white" />     
+* <img src="https://img.shields.io/badge/Express%20js-000000?style=for-the-badge&logo=express&logoColor=white"/>   
+* <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" />       
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -121,16 +127,11 @@ This section should list any major frameworks/libraries used to bootstrap your p
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+* Node
+* Docker
 
 ### Installation
 
@@ -139,16 +140,31 @@ _Below is an example of how you can instruct your audience on installing and set
 1. Get a free API Key at [https://example.com](https://example.com)
 2. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+   git clone https://github.com/dyte-submissions/november-2023-hiring-deveshXm.git
+
+3. Start Docker Compose file
+    ```
+    docker compose up
+    ```
+4. Produce logs at http://localhost:3000/logs 
+    ```
+      curl -X POST \
+      http://localhost:3000/logs \
+      -H 'Content-Type: application/json' \
+      -d '{
+            "level": "info",
+            "message": "Application started successfully",
+            "resourceId": "server-5678",
+            "timestamp": "2023-11-19T12:34:56Z",
+            "traceId": "def-uvw-456",
+            "spanId": "span-789",
+            "commit": "a1b2c3d",
+            "metadata": {
+                "parentResourceId": "server-1234"
+            }
+          }'
+
+    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

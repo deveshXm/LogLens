@@ -26,6 +26,16 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
+    # PostgreSQL output configuration
+    jdbc {
+        jdbc_connection_string => "jdbc:postgresql://your_postgresql_host:5432/your_database"
+        jdbc_user => "postgres"
+        jdbc_password => "password"
+        jdbc_driver_class => "org.postgresql.Driver"
+        statement => ["INSERT INTO your_table (column1, column2, ...) VALUES (?, ?, ...)"]
+    }
+
+
 
 <!-- PROJECT LOGO -->
 <br />
