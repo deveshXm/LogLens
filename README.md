@@ -32,21 +32,10 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="150" height="80">
+    <img src="images/logo.png" alt="Logo" width="400" height="200">
   </a>
-
-  <h1 align="center">Log Lens</h1>
-
-  <p align="center">
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
+  <h3>
+Log Lens: Unleashing the Power of Efficient Log Management and Seamless Querying</h3>
 </div>
 
 
@@ -84,10 +73,9 @@
 
 
 
-### System Design
 
-Log Lens - Log Ingestor and Query Interface
-Overview
+### Overview
+
 Welcome to Log Lens, a powerful log management system designed to efficiently handle vast volumes of log data. This project encompasses a robust log ingestor and a user-friendly query interface, providing seamless log analysis capabilities. The following guide will help you understand the project, run it successfully, and explore its features.
 
 ### Features
@@ -102,6 +90,8 @@ Advanced Features (Bonus):
 Regular Expression Support: Log Lens supports the use of regular expressions for more flexible and powerful searches.
 8. Combined Filters: Users can combine multiple filters for a more refined log search.
 9. Real-time Capabilities: Log Lens provides real-time log ingestion and searching capabilities for up-to-the-minute analysis.
+
+### System Design
 
 ![Product Name Screen Shot][system-design]
 
@@ -132,6 +122,7 @@ This section should list any major frameworks/libraries used to bootstrap your p
 This is an example of how to list things you need to use the software and how to install them.
 * Node
 * Docker
+* Docker Compose
 
 ### Installation
 
@@ -146,7 +137,14 @@ _Below is an example of how you can instruct your audience on installing and set
     ```
     docker compose up
     ```
-4. Produce logs at http://localhost:3000/logs 
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<!-- USAGE EXAMPLES -->
+## Usage
+
+
+1. Produce logs at http://localhost:3000/logs 
     ```
       curl -X POST \
       http://localhost:3000/logs \
@@ -165,37 +163,32 @@ _Below is an example of how you can instruct your audience on installing and set
           }'
 
     ```
+  
+2. Query into Elastic Search at http://localhost:3001
+    ```
+      GET http://localhost:3001/search?{Query Params}
+
+    ```
+    - ###  Query Params
+      -  level
+      -  message
+      -  resourceId
+      -  timestampStart
+      -  timestampEnd
+      -  traceId
+      -  spanId
+      -  commit
+      -  parentResourceId
+
+    - Example Request 
+      ```bash
+        GET http://localhost:3001/query?resourceId=server-1&timestampStart=2023-08-15T00:00:00Z&timestampEnd=2023-09-15T23:59:59Z`
+      ```
+3. Access Dashboard UI at http://localhost:4173
+
+ <img src="images/dashboard.png" alt="Logosd">
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- CONTRIBUTING -->
@@ -269,6 +262,7 @@ Use this space to list resources you find helpful and would like to give credit 
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/othneildrew
 [system-design]: images/design.png
+[ui-screenshot]: images/dashboard.png
 [Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
 [Next-url]: https://nextjs.org/
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
