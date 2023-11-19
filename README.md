@@ -183,6 +183,11 @@ _Below is an example of how you can instruct your audience on installing and set
     - Example Request 
       ```bash
         GET http://localhost:3001/query?resourceId=server-1&timestampStart=2023-08-15T00:00:00Z&timestampEnd=2023-09-15T23:59:59Z`
+
+4. Real Time log at Kibana
+
+      ```
+        http://localhost:5601/app/logs/stream?flyoutOptions=(flyoutId:!n,flyoutVisibility:hidden,surroundingLogsId:!n)&logFilter=(expression:%27%27,kind:kuery)&logPosition=(end:now,position:(tiebreaker:6,time:1700383920183),start:now-1d,streamLive:!f)
       ```
 3. Access Dashboard UI at http://localhost:4173
 
