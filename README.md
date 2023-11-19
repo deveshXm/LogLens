@@ -44,7 +44,7 @@
 
 ## Video Explanation
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/692791000fb4491c9139c75feadf2f2e?sid=e9759f5d-d98e-4003-bfc8-a945d47a154a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+https://www.loom.com/share/692791000fb4491c9139c75feadf2f2e?sid=ab2b42a2-516b-4184-b1c4-911ce78eb57f
 
 ## Components Overview
 
