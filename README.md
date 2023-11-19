@@ -60,7 +60,7 @@
 
   - **Elasticsearch:** Stores log data efficiently and facilitates powerful search and analysis capabilities. Integrated with Kibana for real-time visualization.
 
-## Proposed Features
+## 🌟 Proposed Features
 
 1. **Fault Tolerance:**
    - Distributed components and Kafka's replication ensure the system can continue functioning in the face of failures.
