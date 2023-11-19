@@ -40,7 +40,7 @@
 
 # 🏛️ Proposed Architecture
 
- <img src="./images/design.png"/>  
+<img src="./images/design.png"/>  
 
 ## Components Overview
 
