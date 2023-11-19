@@ -43,33 +43,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper
-
-  # connect:
-  #   image: confluentinc/cp-kafka-connect:7.2.2
-  #   container_name: connect
-  #   environment:
-  #     CONNECT_BOOTSTRAP_SERVERS: "kafka-1:29092,kafka-2:29093"
-  #     CONNECT_REST_PORT: "8083"
-  #     CONNECT_GROUP_ID: "kpow-local-connect"
-  #     CONNECT_CONFIG_STORAGE_TOPIC: "kpow-local-connect-config"
-  #     CONNECT_OFFSET_STORAGE_TOPIC: "kpow-local-connect-offsets"
-  #     CONNECT_STATUS_STORAGE_TOPIC: "kpow-local-connect-status"
-  #     CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-  #     CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-  #     CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-  #     CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
-  #     CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
-  #     CONNECT_LOG4J_ROOT_LOGLEVEL: "INFO"
-  #     CONNECT_PLUGIN_PATH: /usr/share/java/,/etc/kafka-connect/jars
-  #   depends_on:
-  #     - zookeeper
-  #     - kafka-1
-  #     - kafka-2
-  #   volumes:
-  #     - ./connect:/etc/kafka-connect/jars
-  #   networks:
-  #     - kafka-net
-
+      
   init-kafka:
     image: confluentinc/cp-kafka:7.2.2
     depends_on:
@@ -83,6 +57,100 @@ services:
       kafka-topics --bootstrap-server kafka-1:9092 --create --if-not-exists --topic logs --replication-factor 2 --partitions 1
       kafka-topics --bootstrap-server kafka-2:9092 --create --if-not-exists --topic logs --replication-factor 2 --partitions 1
       "
+    
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:7.9.1
+    environment:
+      - cluster.name=kafka-cluster
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data:rw
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    depends_on:
+      - kafka-1
+      - kafka-2
+    stdin_open: true
+    tty: true
+    restart: always
+    networks:
+      - kafka-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+    healthcheck:
+      test: curl -u elastic:elastic -s -f elasticsearch:9200/_cat/health >/dev/null || exit 1
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  logstash:
+    container_name: logstash
+    image: logstash:7.9.1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./server/logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+    ports:
+      - 5044:5044
+    depends_on:
+      - elasticsearch
+    stdin_open: true
+    tty: true
+    restart: always
+    networks:
+      - kafka-net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+    healthcheck:
+      test: ["CMD", "curl", "--silent", "--fail", "http://logstash:9600"]
+      interval: 30s
+      timeout: 15s
+      retries: 3
+
+  kibana:
+    container_name: kibana-cntr
+    image: kibana:7.9.1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 5601:5601
+    depends_on:
+      - elasticsearch
+    stdin_open: true
+    tty: true
+    restart: always
+    networks:
+      - kafka-net
+    links: ['elasticsearch']
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "50"
+    healthcheck:
+      test: curl --fail http://kibana:5601 || exit 1
+      interval: 30s
+      retries: 3
+      timeout: 10s
 
   log-producer-1:
     container_name: log-producer-1
@@ -128,18 +196,18 @@ services:
       - kafka-net
     restart: always
 
-  log-consumer:
-    container_name: log-consumer
-    build:
-      context: ./server/log_consumer
-      dockerfile: Dockerfile
-    environment:
-      - KAFKA_ADDR=kafka-1:29092,kafka-2:29093
-    depends_on:
-      - kafka-1
-      - kafka-2
-    networks:
-      - kafka-net
+  # log-consumer:
+  #   container_name: log-consumer
+  #   build:
+  #     context: ./server/log_consumer
+  #     dockerfile: Dockerfile
+  #   environment:
+  #     - KAFKA_ADDR=kafka-1:29092,kafka-2:29093
+  #   depends_on:
+  #     - kafka-1
+  #     - kafka-2
+  #   networks:
+  #     - kafka-net
   
   # web-client:
   #   container_name: web-client
@@ -154,3 +222,7 @@ services:
 networks:
   kafka-net:
     driver: bridge
+
+volumes:
+  elasticsearch_data:
+    driver: local

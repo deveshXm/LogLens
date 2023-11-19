@@ -12,11 +12,9 @@ const consumer = kafka.consumer({ groupId: 'log-group' });
 const run = async () => {
   await consumer.connect();
   await consumer.subscribe({ topic: 'logs', fromBeginning: true });
-
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      const value = JSON.parse(message.value.toString());
-      // Process the message as needed
+      const value = message.value
       console.log('Received message:', value);
     },
   });

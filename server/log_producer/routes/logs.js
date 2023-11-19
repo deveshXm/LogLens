@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { Kafka } = require('kafkajs');
 
-const defaultKafkaAddr = ['kafka-1:29092','kafka-2:29093'];
+const defaultKafkaAddr = ['kafka-1:29092', 'kafka-2:29093'];
 
 const kafka = new Kafka({
   clientId: 'log-service',
@@ -17,11 +17,11 @@ producer.connect();
 router.post('/', async (req, res, next) => {
   try {
     // Use a unique key for each message, for example, a timestamp
-    const key = new Date().toISOString();
+    const key = new Date().toISOString(); // Change this line if necessary
 
     await producer.send({
       topic: 'logs',
-      messages: [{ key, value: JSON.stringify(req.body) }],
+      messages: [{ value: JSON.stringify(req.body) }],
     });
 
     console.log('Message sent');
