@@ -64,7 +64,7 @@ https://www.loom.com/share/692791000fb4491c9139c75feadf2f2e?sid=ab2b42a2-516b-41
 
   - **Elasticsearch:** Stores log data efficiently and facilitates powerful search and analysis capabilities. Integrated with Kibana for real-time visualization.
 
-## 🌟 Proposed Features
+# 🌟 Proposed Features
 
 1. **Fault Tolerance:**
    - Distributed components and Kafka's replication ensure the system can continue functioning in the face of failures.
@@ -123,7 +123,7 @@ _Below is an example of how you can instruct your audience on installing and set
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
-## 🔄 Usage
+# 🔄 Usage
 
 
 1. Produce logs at http://localhost:3000/logs 
@@ -177,7 +177,7 @@ _Below is an example of how you can instruct your audience on installing and set
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## 🛠️ Technologies Used
+# 🛠️ Technologies Used
 
   *  <img src="https://img.shields.io/badge/Apache%20Kafka-000?style=for-the-badge&logo=apachekafka"/>   
   *  <img src="https://img.shields.io/badge/React-2CA5E0?style=for-the-badge&logo=docker&logoColor=white"/>   
@@ -216,7 +216,7 @@ _Below is an example of how you can instruct your audience on installing and set
 <!-- ### Backend
 [![My Skills](https://skillicons.dev/icons?i=nodejs,express,docker,redis,nginx,)](https://skillicons.dev) -->
 
-## 🏆 Why this Architecure 
+# 🏆 Why this Architecure 
 
 
 * ### Fault Tolerance
@@ -255,7 +255,7 @@ For testing a Node.js application to assess its performance and scalability some
 
 1. Grafana K6
 
-## 🔄 How it can be Improved Further
+# 🔄 How it can be Improved Further
 
 
 * ### Fault Tolerance
@@ -292,7 +292,7 @@ For testing a Node.js application to assess its performance and scalability some
 
 <!-- ## 📝 Commit Histories -->
 
-## 📖 References Used
+# 📖 References Used
 - https://shivama205.medium.com/real-time-log-management-system-9a0258ca0516
 - https://aircconline.com/ijcsea/V7N4/7417ijcsea02.pdf
 - https://stackoverflow.com/questions/16192755/hybrid-db-system-nosql-for-data-sql-for-relationships-best-practice
