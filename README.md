@@ -3,8 +3,6 @@
 
 - Welcome to Log Lens, a powerful log management system designed to efficiently handle vast volumes of log data. This project encompasses a robust log ingestor and a user-friendly query interface, providing seamless log analysis capabilities. The following guide will help you understand the project, run it successfully, and explore its features.
 
-- Built for Dyte 2023 Assignment
-
 <div style="text-align:center">
   <img src="./images/logo.png" alt="Dyte logo" />
 </div>
@@ -41,10 +39,6 @@
 # 🏛️ Proposed Architecture
 
 <img src="./images/design.png"/>  
-
-## Video Explanation
-
-https://www.loom.com/share/692791000fb4491c9139c75feadf2f2e?sid=ab2b42a2-516b-4184-b1c4-911ce78eb57f
 
 ## Components Overview
 
