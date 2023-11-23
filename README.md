@@ -9,25 +9,16 @@
 
 ## Contents
 1. [About Me](#-about-me)
-5. [Prerequistes](#pre-requisites)
-5. [Features Implemented](#-features-implemented)
-6. [Demo Video](#-demo-video)
-7. [Solution Architecture](#-solution-architecture)
-8. [Technologies Used](#-technologies-used)
-9. [Why this Architecture](#-why-this-architecture-stands-out-best)
-10. [Benchmarking](#-benchmarking)
-13. [How it Can be Improved Further](#-how-it-can-be-improved-further)
-15. [Commit Histories](#-commit-histories)
-16. [References Used](#-references-used)
-17. [Note of Thanks](#-note-of-thanks)
+2. [Features Implemented](#-features-implemented)
+3. [Getting Started](#getting-started)
+4. [Demo Video](#-demo-video)
+5. [Solution Architecture](#-solution-architecture)
+6. [Technologies Used](#-technologies-used)
+7. [Why this Architecture](#-why-this-architecture-stands-out-best)
+8. [Benchmarking](#-benchmarking)
+9. [How it Can be Improved Further](#-how-it-can-be-improved-further)
+10. [References Used](#-references-used)
 
-# 👤 About Me
-
-- Name: Devesh Meena
-- Email: nothefakedevesh@gmail.com, meenadevesh2003@gmail.com
-- Github Username: deveshXm
-- LinkedIn: https://www.linkedin.com/in/devxm/
-- University: National Institute of Technology, Jalandhar
 # ⚙️ Features Implemented
 
 - [x] Log Ingestor
